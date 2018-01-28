@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Tar server</title>
 </head>
 <body>
     <h1>Tar server</h1>
-    <p>Please click the link below to download the entire folder as a .tar file</p>
+    <p>Serving from folder {{.DirPath}}</p>
+    <p>Please click the link below to download the entire file or folder as a .tar file</p>
     <ul>
-        {{range .}}
-            <li><a href="/files/{{.Path}}">{{.Path}} {{.Size}}</a></li>
+        {{range .DirInfo}}
+            <li><a href="/files/{{.Path}}">{{.Path}}</a></li>
         {{end}}
     </ul>
 </body>
