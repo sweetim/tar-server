@@ -1,6 +1,9 @@
 package main
 
-import "io/ioutil"
+import (
+	"io/ioutil"
+	"os"
+)
 
 type DirInfo struct {
 	Path string `json:"path"`
@@ -31,4 +34,12 @@ func GetDir(p string) (<-chan []DirInfo, <-chan error) {
 	}()
 
 	return ch, errCh
+}
+
+func GetEnv(key string, v interface{}) interface{} {
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+
+	return v
 }
