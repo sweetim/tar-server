@@ -54,8 +54,12 @@ func fileHandler(config *serverConfig) func(w http.ResponseWriter, r *http.Reque
 				DirInfo: dir,
 			})
 
-		case <-errCh:
+		case e := <-errCh:
 			w.WriteHeader(http.StatusExpectationFailed)
+			w.Write([]byte("Please set the DIR_PATH correctly\n"))
+			w.Write([]byte(e.Error()))
+
+			log.Println(e)
 		}
 	}
 }
