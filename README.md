@@ -8,15 +8,24 @@ This application is to develop to solve the annoying problem of transferring fil
 
 Now you could enjoy fast transfer of large data to your host PC :)
 
-
 ### Deployment using Docker
 
-```
-docker run -it --rm -v <DIR_TO_SHARE>:<DIR_TO_SHARE> -e DIR_PATH="<DIR_TO_SHARE>" timx/tar-server
-```
+    docker run -it --rm -v <DIR_TO_SHARE>:<DIR_TO_SHARE> -e DIR_PATH="<DIR_TO_SHARE>" timx/tar-server
+
+### Deployment using Docker compose
+
+    version: "3"
+
+    services:
+        tarserver:
+            image: timx/tar-server
+            ports:
+                - "3000:3000"
+            environment:
+                - DIR_PATH=<DIR_TO_SHARE>
+            volumes:
+                - <DIR_TO_SHARE>:<DIR_TO_SHARE>
 
 ### Build from source
 
-```
-go build && ./tar-server
-```
+    go build && ./tar-server
