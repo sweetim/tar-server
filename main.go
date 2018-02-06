@@ -16,11 +16,6 @@ type serverConfig struct {
 	portNumber int
 }
 
-type fileViewModel struct {
-	DirPath string
-	DirInfo []DirInfo
-}
-
 func main() {
 	config := serverConfig{
 		dirPath:    GetEnv("DIR_PATH", "").(string),
@@ -49,7 +44,10 @@ func fileHandler(config *serverConfig) func(w http.ResponseWriter, r *http.Reque
 		case dir := <-ch:
 			t, _ := template.ParseFiles("views/index.html")
 
-			t.Execute(w, fileViewModel{
+			t.Execute(w, struct {
+				DirPath string
+				DirInfo []DirInfo
+			}{
 				DirPath: config.dirPath,
 				DirInfo: dir,
 			})
@@ -73,6 +71,9 @@ func fileIDHandler(config *serverConfig) func(w http.ResponseWriter, r *http.Req
 		w.Header().Set(
 			"Content-Disposition",
 			fmt.Sprintf("attachment; filename=\"%v.tar\"", fileName))
+		w.Header().Set(
+			"Content-Length",
+			fmt.Sprintf("%v", GetDirSize(p)))
 
 		archiver.Tar.Write(w, []string{p})
 
