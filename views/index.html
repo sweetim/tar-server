@@ -5,20 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Tar server</title>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+
     <style>
-        body {
-            font-family: Arial, Helvetica, sans-serif
+        .collection {
+            border: 0em;
         }
     </style>
 </head>
 <body>
-    <h1>Tar server</h1>
-    <p>Serving from folder <strong>{{.DirPath}}</strong></p>
-    <p>Please click the link below to download the entire file or folder as a .tar file</p>
-    <ul>
-        {{range .DirInfo}}
-            <li><a href="/files/{{.Path}}">{{.Path}}</a></li>
-        {{end}}
-    </ul>
+    <div class="container">
+        <h1>Tar server</h1>
+        <p>Serving from folder <strong>{{.DirPath}}</strong></p>
+        <p>Please click the link below to download the entire file or folder as a .tar file</p>
+        <div class="collection">
+            {{range .DirInfo}}
+                <a class="collection-item blue-grey-text"
+                    href="/files/{{.Path}}">
+                    <span class="new badge indigo"
+                        data-badge-caption="">
+                        {{.Size}}
+                    </span>
+                    {{.Path}}
+                </a>
+            {{end}}
+        </div>
+    </div>
 </body>
 </html>
