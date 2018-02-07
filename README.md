@@ -24,7 +24,7 @@ Now you could enjoy fast transfer of large data to your host PC :)
             environment:
                 - DIR_PATH=<DIR_TO_SHARE>
             volumes:
-                - <DIR_TO_SHARE>:<DIR_TO_SHARE>
+                - <DIR_TO_SHARE>:<DIR_TO_SHARE>:ro
 
 ### Build from source
 
