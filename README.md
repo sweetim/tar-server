@@ -1,4 +1,4 @@
-### Tar Server
+### Tar Server [![Maintainability](https://api.codeclimate.com/v1/badges/c982a5e7ccbc5f56a877/maintainability)](https://codeclimate.com/github/sweetim/tar-server/maintainability)
 
 This server will package the selected folder into a `.tar` and to be downloaded into the user PC
 
