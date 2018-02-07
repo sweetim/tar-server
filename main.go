@@ -71,9 +71,6 @@ func fileIDHandler(config *serverConfig) func(w http.ResponseWriter, r *http.Req
 		w.Header().Set(
 			"Content-Disposition",
 			fmt.Sprintf("attachment; filename=\"%v.tar\"", fileName))
-		w.Header().Set(
-			"Content-Length",
-			fmt.Sprintf("%v", GetDirSize(p)))
 
 		archiver.Tar.Write(w, []string{p})
 
