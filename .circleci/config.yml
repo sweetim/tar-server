@@ -8,8 +8,8 @@ jobs:
     steps:
       - checkout
 
-      - run: go get
-      - run: go test -v -cover
+      - run: go get -t -d -v ./...
+      - run: go test -v -cover ./...
   build:
     docker:
       - image: circleci/golang:1.9
@@ -18,8 +18,8 @@ jobs:
     steps:
       - checkout
 
-      - run: go get
-      - run: go build
+      - run: go get -v
+      - run: go build -v
 workflows:
   version: 2
   test_and_build:
