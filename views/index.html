@@ -8,6 +8,7 @@
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <style>
         .collection {
@@ -24,6 +25,13 @@
             {{range .DirInfo}}
                 <a class="collection-item blue-grey-text"
                     href="/files/{{.Path}}">
+                    <i class="material-icons blue-grey-text text-darken-3" style="padding-right: 5px">
+                        {{if .IsFolder}}
+                            folder
+                        {{else}}
+                            insert_drive_file
+                        {{end}}
+                    </i>                    
                     <span class="new badge indigo"
                         data-badge-caption="">
                         {{.Size}}
