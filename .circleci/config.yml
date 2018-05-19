@@ -35,7 +35,7 @@ jobs:
           docker push timx/tar-server
 workflows:
   version: 2
-  test_and_build:
+  build_test_deploy:
     jobs:
       - build
       - test:
@@ -44,3 +44,6 @@ workflows:
       - deploy:
           requires:
             - test
+          filters:
+            branches:
+              only: master
