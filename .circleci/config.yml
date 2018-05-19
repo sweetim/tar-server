@@ -20,6 +20,16 @@ jobs:
 
       - run: go get -v
       - run: go test -v -cover ./...
+  deploy:
+    machine: true
+    working_directory: /go/src/github.com/sweetim/tar-server
+    steps:
+      - checkout
+
+      - run: |
+          docker login -u $USERNAME -p $PASSWORD
+          docker build -t timx/tar-server .
+          docker push timx/tar-server
 workflows:
   version: 2
   test_and_build:
@@ -28,3 +38,6 @@ workflows:
       - test:
           requires:
             - build
+      - deploy:
+          requires:
+            - test
