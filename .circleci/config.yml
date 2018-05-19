@@ -21,15 +21,17 @@ jobs:
       - run: go get -v
       - run: go test -v -cover ./...
   deploy:
-    machine: true
+    docker:
+      - image: docker:latest
     working_directory: /go/src/github.com/sweetim/tar-server
     steps:
       - checkout
+      - setup_remote_docker 
 
       - run: |
-          docker login -u $USERNAME -p $PASSWORD
-          docker build -t timx/tar-server .
-          docker push timx/tar-server
+        docker login -u $USERNAME -p $PASSWORD
+        docker build -t timx/tar-server .
+        docker push timx/tar-server
 workflows:
   version: 2
   test_and_build:
