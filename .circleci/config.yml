@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/golang:1.9
+      - image: circleci/golang:1.10
 
     working_directory: /go/src/github.com/sweetim/tar-server
     steps:
@@ -14,7 +14,7 @@ jobs:
     environment:
       CC_TEST_REPORTER_ID: 453707d0137eb1dbedd7bb76290a15de5ab15142c56cd5a447f3ffb19ab34ee2
     docker:
-      - image: circleci/golang:1.9
+      - image: circleci/golang:1.10
 
     working_directory: /go/src/github.com/sweetim/tar-server
     steps:
@@ -24,16 +24,13 @@ jobs:
           command: |
             curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
             chmod +x ./cc-test-reporter
+      - run: go get -v
       - run:
-          name: Run tests
+          name: Run tests and push coverage to code climate
           command: |
             ./cc-test-reporter before-build
-            go get -v
-            go test -v -cover ./... -coverprofile=out 
-            ./cc-test-reporter format-coverage --input-type gocov out 
-            ./cc-test-reporter upload-coverage
-
-
+            go test -v -cover ./... -coverprofile=c.out 
+            ./cc-test-reporter after-build --coverage-input-type gocov
   deploy:
     docker:
       - image: docker:latest
