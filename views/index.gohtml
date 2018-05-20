@@ -19,26 +19,23 @@
 <body>
     <div class="container">
         <h1>Tar server</h1>
-        <p>Serving from folder <strong>{{.DirPath}}</strong></p>
+        <p>Serving from folder <strong>{{ .DirPath }}</strong></p>
         <p>Please click the link below to download the entire file or folder as a .tar file</p>
         <div class="collection">
-            {{range .DirInfo}}
+            {{ range .DirInfo }}
                 <a class="collection-item blue-grey-text"
                     href="/files/{{.Path}}">
-                    <i class="material-icons blue-grey-text text-darken-3" style="padding-right: 5px">
-                        {{if .IsFolder}}
-                            folder
-                        {{else}}
-                            insert_drive_file
-                        {{end}}
+                    <i class="material-icons blue-grey-text text-darken-3" 
+                        style="padding-right: 5px">
+                        {{ .IsFolder | BoolMapString "folder_open" "insert_drive_file" }}
                     </i>                    
                     <span class="new badge indigo"
                         data-badge-caption="">
-                        {{.Size}}
+                        {{ .Size | UnitSuffix }}
                     </span>
-                    {{.Path}}
+                    {{ .Path }}
                 </a>
-            {{end}}
+            {{ end }}
         </div>
     </div>
 </body>
