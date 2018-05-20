@@ -1,6 +1,8 @@
 # Tar Server 
 
+[![CircleCI](https://circleci.com/gh/sweetim/tar-server.svg?style=svg)](https://circleci.com/gh/sweetim/tar-server)
 [![Maintainability](https://api.codeclimate.com/v1/badges/c982a5e7ccbc5f56a877/maintainability)](https://codeclimate.com/github/sweetim/tar-server/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/c982a5e7ccbc5f56a877/test_coverage)](https://codeclimate.com/github/sweetim/tar-server/test_coverage)
 [![Go Report Card](https://goreportcard.com/badge/github.com/sweetim/tar-server)](https://goreportcard.com/report/github.com/sweetim/tar-server)
 
 This server will package the selected folder into a `.tar` and to be downloaded into the user PC
