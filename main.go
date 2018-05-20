@@ -9,6 +9,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/mholt/archiver"
+	"github.com/sweetim/tar-server/util"
 )
 
 type serverConfig struct {
@@ -18,8 +19,8 @@ type serverConfig struct {
 
 func main() {
 	config := serverConfig{
-		dirPath:    GetEnv("DIR_PATH", "").(string),
-		portNumber: GetEnv("PORT", 3000).(int),
+		dirPath:    util.GetEnv("DIR_PATH", "").(string),
+		portNumber: util.GetEnv("PORT", 3000).(int),
 	}
 
 	if config.dirPath == "" {
@@ -38,19 +39,34 @@ func main() {
 
 func fileHandler(config *serverConfig) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		ch, errCh := GetDir(config.dirPath)
+		ch, errCh := util.GetDir(config.dirPath)
 
 		select {
 		case dir := <-ch:
-			t, _ := template.ParseFiles("views/index.html")
+			t, err := template.New("index.gohtml").
+				Funcs(
+					template.FuncMap{
+						"UnitSuffix":    util.UnitSuffix,
+						"BoolMapString": util.BoolMapString,
+						"IndexColor":    util.IndexColor,
+					}).
+				ParseFiles("views/index.gohtml")
 
-			t.Execute(w, struct {
+			if err != nil {
+				panic(err)
+			}
+
+			err = t.Execute(w, struct {
 				DirPath string
-				DirInfo []DirInfo
+				DirInfo []util.DirInfo
 			}{
 				DirPath: config.dirPath,
 				DirInfo: dir,
 			})
+
+			if err != nil {
+				panic(err)
+			}
 
 		case e := <-errCh:
 			w.WriteHeader(http.StatusExpectationFailed)

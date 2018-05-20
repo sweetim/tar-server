@@ -1,0 +1,60 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:1.10
+
+    working_directory: /go/src/github.com/sweetim/tar-server
+    steps:
+      - checkout
+
+      - run: go get -v
+      - run: go build -v
+  test:
+    environment:
+      CC_TEST_REPORTER_ID: 453707d0137eb1dbedd7bb76290a15de5ab15142c56cd5a447f3ffb19ab34ee2
+    docker:
+      - image: circleci/golang:1.10
+
+    working_directory: /go/src/github.com/sweetim/tar-server
+    steps:
+      - checkout
+      - run:
+          name: Setup Code Climate test-reporter
+          command: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+      - run:
+          name: Run tests and push coverage to code climate
+          command: |
+            go get -v
+            ./cc-test-reporter before-build
+            go test -v -cover ./... -coverprofile=c.out 
+            ./cc-test-reporter after-build --coverage-input-type gocov
+  deploy:
+    docker:
+      - image: docker:latest
+  
+    working_directory: /go/src/github.com/sweetim/tar-server
+    steps:
+      - checkout
+      - setup_remote_docker 
+
+      - run: |
+          docker login -u $USERNAME -p $PASSWORD
+          docker build -t timx/tar-server .
+          docker push timx/tar-server
+workflows:
+  version: 2
+  build_test_deploy:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      - deploy:
+          requires:
+            - test
+          filters:
+            branches:
+              only: master
