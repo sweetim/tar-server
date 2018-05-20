@@ -9,9 +9,9 @@ import (
 
 // DirInfo contains absolute path and size in byte
 type DirInfo struct {
-	Path     string  `json:"path"`
-	Size     float64 `json:"size"`
-	IsFolder bool    `json:"isFolder"`
+	Path     string `json:"path"`
+	Size     int64  `json:"size"`
+	IsFolder bool   `json:"isFolder"`
 }
 
 // GetDir gets all the directories from the path
@@ -31,7 +31,7 @@ func GetDir(p string) (<-chan []DirInfo, <-chan error) {
 		for _, dirPath := range fInfo {
 			info = append(info, DirInfo{
 				Path:     dirPath.Name(),
-				Size:     float64(GetDirSize(path.Join(p, dirPath.Name()))),
+				Size:     GetDirSize(path.Join(p, dirPath.Name())),
 				IsFolder: dirPath.IsDir(),
 			})
 		}

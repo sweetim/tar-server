@@ -6,7 +6,8 @@ import (
 )
 
 // UnitSuffix will suffix the value with unit
-func UnitSuffix(v float64) string {
+func UnitSuffix(input int64) string {
+	v := float64(input)
 	var units = [...]string{"B", "kB", "MB", "GB"}
 
 	if v == 0 {

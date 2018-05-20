@@ -6,7 +6,7 @@ import (
 
 func TestUnitSuffix(t *testing.T) {
 	cases := []struct {
-		in       int
+		in       int64
 		expected string
 	}{
 		{0, "0 B"},
@@ -18,7 +18,7 @@ func TestUnitSuffix(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		actual := UnitSuffix(float64(c.in))
+		actual := UnitSuffix(c.in)
 
 		if actual != c.expected {
 			t.Errorf("actual (%v) != expected (%v)",
