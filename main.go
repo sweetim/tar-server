@@ -48,6 +48,7 @@ func fileHandler(config *serverConfig) func(w http.ResponseWriter, r *http.Reque
 					template.FuncMap{
 						"UnitSuffix":    util.UnitSuffix,
 						"BoolMapString": util.BoolMapString,
+						"IndexColor":    util.IndexColor,
 					}).
 				ParseFiles("views/index.gohtml")
 

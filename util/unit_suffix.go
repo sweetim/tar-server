@@ -5,13 +5,23 @@ import (
 	"math"
 )
 
+// UnitSuffixResult provides the formatted text and base power
+type UnitSuffixResult struct {
+	Text  string
+	Power int
+}
+
+var units = [...]string{"B", "kB", "MB", "GB"}
+
 // UnitSuffix will suffix the value with unit
-func UnitSuffix(input int64) string {
+func UnitSuffix(input int64) UnitSuffixResult {
 	v := float64(input)
-	var units = [...]string{"B", "kB", "MB", "GB"}
 
 	if v == 0 {
-		return "0 B"
+		return UnitSuffixResult{
+			"0 B",
+			0,
+		}
 	}
 
 	power := int(math.Floor(math.Log10(v) / math.Log10(1024)))
@@ -21,5 +31,8 @@ func UnitSuffix(input int64) string {
 
 	base := v / math.Pow(1024, float64(power))
 
-	return fmt.Sprintf("%.f %v", base, units[power])
+	return UnitSuffixResult{
+		fmt.Sprintf("%.f %v", base, units[power]),
+		power,
+	}
 }
