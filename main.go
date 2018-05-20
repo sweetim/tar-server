@@ -43,24 +43,29 @@ func fileHandler(config *serverConfig) func(w http.ResponseWriter, r *http.Reque
 
 		select {
 		case dir := <-ch:
-			t, err := template.New("index.html").
+			t, err := template.New("index.gohtml").
 				Funcs(
 					template.FuncMap{
-						"UnitSuffix": util.UnitSuffix,
+						"UnitSuffix":    util.UnitSuffix,
+						"BoolMapString": util.BoolMapString,
 					}).
-				ParseFiles("views/index.html")
+				ParseFiles("views/index.gohtml")
 
 			if err != nil {
 				panic(err)
 			}
 
-			t.Execute(w, struct {
+			err = t.Execute(w, struct {
 				DirPath string
 				DirInfo []util.DirInfo
 			}{
 				DirPath: config.dirPath,
 				DirInfo: dir,
 			})
+
+			if err != nil {
+				panic(err)
+			}
 
 		case e := <-errCh:
 			w.WriteHeader(http.StatusExpectationFailed)
