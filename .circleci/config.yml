@@ -24,10 +24,10 @@ jobs:
           command: |
             curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
             chmod +x ./cc-test-reporter
-      - run: go get -v
       - run:
           name: Run tests and push coverage to code climate
           command: |
+            go get -v
             ./cc-test-reporter before-build
             go test -v -cover ./... -coverprofile=c.out 
             ./cc-test-reporter after-build --coverage-input-type gocov
