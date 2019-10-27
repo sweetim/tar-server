@@ -5,7 +5,9 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"os"
 	"path"
+	"path/filepath"
 
 	"github.com/gorilla/mux"
 	"github.com/mholt/archiver"
@@ -19,7 +21,7 @@ type serverConfig struct {
 
 func main() {
 	config := serverConfig{
-		dirPath:    util.GetEnv("DIR_PATH", "").(string),
+		dirPath:    util.GetEnv("DIR_PATH", "/data").(string),
 		portNumber: util.GetEnv("PORT", 3000).(int),
 	}
 
@@ -88,7 +90,40 @@ func fileIDHandler(config *serverConfig) func(w http.ResponseWriter, r *http.Req
 			"Content-Disposition",
 			fmt.Sprintf("attachment; filename=\"%v.tar\"", fileName))
 
-		archiver.Tar.Write(w, []string{p})
+		err := archiver.DefaultTar.Create(w)
+		if err != nil {
+			http.Error(w, err.Error(), 500)
+		}
+
+		defer archiver.DefaultTar.Close()
+
+		err = filepath.Walk(p, func(path string, info os.FileInfo, err error) error {
+			file, err := os.Open(path)
+			if err != nil {
+				return err
+			}
+
+			defer file.Close()
+
+			fileInfo, err := file.Stat()
+			if err != nil {
+				return err
+			}
+
+			archiver.DefaultTar.Write(archiver.File{
+				FileInfo: archiver.FileInfo{
+					FileInfo:   fileInfo,
+					CustomName: path[len(filepath.Dir(p)):],
+				},
+				ReadCloser: file,
+			})
+
+			return nil
+		})
+
+		if err != nil {
+			http.Error(w, err.Error(), 500)
+		}
 
 		log.Println(fmt.Sprintf("File served at [%v]", p))
 	}
