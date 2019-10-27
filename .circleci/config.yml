@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/golang:1.10
+      - image: circleci/golang:1.13
 
     working_directory: /go/src/github.com/sweetim/tar-server
     steps:
@@ -14,7 +14,7 @@ jobs:
     environment:
       CC_TEST_REPORTER_ID: 453707d0137eb1dbedd7bb76290a15de5ab15142c56cd5a447f3ffb19ab34ee2
     docker:
-      - image: circleci/golang:1.10
+      - image: circleci/golang:1.13
 
     working_directory: /go/src/github.com/sweetim/tar-server
     steps:
@@ -29,16 +29,16 @@ jobs:
           command: |
             go get -v
             ./cc-test-reporter before-build
-            go test -v -cover ./... -coverprofile=c.out 
+            go test -v -cover ./... -coverprofile=c.out
             ./cc-test-reporter after-build --coverage-input-type gocov
   deploy:
     docker:
       - image: docker:latest
-  
+
     working_directory: /go/src/github.com/sweetim/tar-server
     steps:
       - checkout
-      - setup_remote_docker 
+      - setup_remote_docker
 
       - run: |
           docker login -u $USERNAME -p $PASSWORD
