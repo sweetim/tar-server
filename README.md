@@ -15,7 +15,7 @@ Now you could enjoy fast transfer of large data to your host PC :)
 
 ### Deployment using Docker
 
-    docker run -it --rm -v <DIR_TO_SHARE>:<DIR_TO_SHARE> -e DIR_PATH="<DIR_TO_SHARE>" timx/tar-server
+    docker run -it --rm -v <DIR_TO_SHARE>:/data timx/tar-server
 
 ### Deployment using Docker compose
 
